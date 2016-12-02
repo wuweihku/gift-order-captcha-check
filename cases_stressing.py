@@ -33,7 +33,7 @@ class TestAPI():
         response = urllib.request.urlopen(self.url, postdata).read()  
         response_dict = eval(response)
 
-        print('%s Processing: '%self.threadName,'code->%s'%response_dict['code'],'msg->%s'%response_dict['msg'],'\n')
+        #print('%s Processing: '%self.threadName,'code->%s'%response_dict['code'],'msg->%s'%response_dict['msg'],'\n')
 
 
 class myThread(threading.Thread):    
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     url = 'http://activityapi.qa.15166.com/gift-order-captcha-check'
 
     totalthreads = 1000      #起多少个线程，思想就是一开始就起好所有需要的线程
-    casesnum = 1000         #思想就是一开始就将所有需要的cases准备进队列
+    casesnum = 10000         #思想就是一开始就将所有需要的cases准备进队列
     duration = 1
 
     global Totalcases
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     exitFlag = 0
     caseFlag = list(range(1,casesnum+1))
-    concurrents = int(totalthreads/10) #单轮并发量，可以用casesnum/concurrents，算出一共需要跑多少round
+    concurrents = int(totalthreads/1) #单轮并发量，可以用casesnum/concurrents，算出一共需要跑多少round
 
     def process_data(threadName, q):
         while not exitFlag:
@@ -81,7 +81,17 @@ if __name__ == '__main__':
                 queueLock.release()
 
                 threadtestapi = TestAPI(threadName, url, qdata)  
-                threadtestapi.stressing() 
+               
+                global Successed
+                global Failed
+
+                try:
+                    threadtestapi.stressing()
+                    Successed += 1
+                except BaseException as e:
+                    Failed += 1
+                    print('BaseException:', e)
+                    
             else:
                 queueLock.release()
             time.sleep(0.05)
