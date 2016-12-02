@@ -25,12 +25,11 @@ class CasesPreparing():
     def makecases(self,normal_case = True):
         global Totalcounts                                             
         Totalcounts += 1
-        count = Totalcounts   
         data = self.info
 
         data['action'] = 'getCaptchaCheck'
         data['phone'] = '15888888888'
-        data['giftID'] = '1'
+        data['giftID'] = str(Totalcounts)
 
         sign_data = self.appid + data['phone'] + self.appkey
         sign = hashlib.md5()
@@ -43,8 +42,12 @@ class CasesPreparing():
         f.write(case)
         f.close()
 
-if __name__ == '__main__': 
-    casesnum = 1000
+if __name__ == '__main__':
+    
+    global Totalcounts
+    Totalcounts = 0
+
+    casesnum = 50000
     producer = CasesPreparing()
     global Totalcounts
     Totalcounts = 0

@@ -29,6 +29,9 @@ class TestAPI():
                'sign':self.data['sign']
                }
         Totalcases += 1 
+
+        print('%s Processing: '%self.threadName,'giftID: %s '%self.data['giftID'],'\n')  #证明Queue的顺序有效
+
         postdata = urllib.parse.urlencode(info).encode('utf-8')
         response = urllib.request.urlopen(self.url, postdata).read()  
         response_dict = eval(response)
@@ -51,8 +54,8 @@ class myThread(threading.Thread):
 if __name__ == '__main__': 
     url = 'http://activityapi.qa.15166.com/gift-order-captcha-check'
 
-    totalthreads = 1000      #起多少个线程，思想就是一开始就起好所有需要的线程
-    casesnum = 10000         #思想就是一开始就将所有需要的cases准备进队列
+    totalthreads = 700      #起多少个线程，思想就是一开始就起好所有需要的线程
+    casesnum = 50000         #思想就是一开始就将所有需要的cases准备进队列
     duration = 1
 
     global Totalcases
